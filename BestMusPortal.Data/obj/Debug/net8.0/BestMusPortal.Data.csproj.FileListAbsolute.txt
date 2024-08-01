@@ -1,0 +1,14 @@
+C:\Users\Acer\source\repos\BestMusPortal.Data\bin\Debug\net8.0\BestMusPortal.Data.deps.json
+C:\Users\Acer\source\repos\BestMusPortal.Data\bin\Debug\net8.0\BestMusPortal.Data.runtimeconfig.json
+C:\Users\Acer\source\repos\BestMusPortal.Data\bin\Debug\net8.0\BestMusPortal.Data.dll
+C:\Users\Acer\source\repos\BestMusPortal.Data\bin\Debug\net8.0\BestMusPortal.Data.pdb
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.csproj.AssemblyReference.cache
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.AssemblyInfoInputs.cache
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.AssemblyInfo.cs
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.csproj.CoreCompileInputs.cache
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.dll
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\refint\BestMusPortal.Data.dll
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.pdb
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\BestMusPortal.Data.genruntimeconfig.cache
+C:\Users\Acer\source\repos\BestMusPortal.Data\obj\Debug\net8.0\ref\BestMusPortal.Data.dll
