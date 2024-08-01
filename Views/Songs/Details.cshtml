@@ -1,0 +1,75 @@
+﻿@model BestMusPortal.Services.DTO.SongDTO
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_Layout";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Song</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Artist)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Artist)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Mood)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Mood)
+        </dd>
+        <dt class="col-sm-2">
+            Music File
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.MusicFilePath))
+            {
+                <audio controls>
+                    <source src="@Url.Content($"~/{Model.MusicFilePath}")" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            }
+            else
+            {
+                <span>No Music File</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Video File
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.VideoFilePath))
+            {
+                <video width="200" height="150" controls>
+                    <source src="@Url.Content($"~/{Model.VideoFilePath}")" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            }
+            else
+            {
+                <span>No Video File</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SongId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

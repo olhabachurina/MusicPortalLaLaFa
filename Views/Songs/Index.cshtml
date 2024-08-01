@@ -1,0 +1,318 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.SongDTO>
+@{
+    ViewData["Title"] = "Список песен";
+    Layout = "_Layout";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .sidebar, .main-content {
+            flex: 1;
+            max-width: 300px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            max-width: 1400px;
+        }
+
+            .sidebar h3, .main-content h3 {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        .song-table {
+            width: 100%;
+            border-collapse: collapse;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+            .song-table th, .song-table td {
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .song-table th {
+                background-color: #343a40;
+                color: #fff;
+            }
+
+            .song-table td video {
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border: 1px solid #ddd;
+                transition: transform 0.3s;
+            }
+
+                .song-table td video:hover {
+                    transform: scale(1.1);
+                }
+
+            .song-table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .btn-primary, .btn-secondary, .btn-danger {
+            width: 100%;
+            transition: transform 0.3s;
+        }
+
+            .btn-primary:hover, .btn-secondary:hover, .btn-danger:hover {
+                transform: scale(1.05);
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h5 data-lang="ru">Список песен</h5>
+        <h5 data-lang="uk" style="display: none;">Список пісень</h5>
+        <h5 data-lang="en" style="display: none;">Song List</h5>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="sidebar sidebar-filter">
+            <h3 data-lang="ru">Фильтр песен</h3>
+            <h3 data-lang="uk" style="display: none;">Фільтр пісень</h3>
+            <h3 data-lang="en" style="display: none;">Song Filter</h3>
+            <form id="songFilterForm">
+                <label for="titleFilter" data-lang="ru">Название</label>
+                <label for="titleFilter" data-lang="uk" style="display: none;">Назва</label>
+                <label for="titleFilter" data-lang="en" style="display: none;">Title</label>
+                <input type="text" id="titleFilter" name="titleFilter" class="form-control mb-2" placeholder="Введите название" data-lang="ru">
+                <input type="text" id="titleFilter" name="titleFilter" class="form-control mb-2" placeholder="Введіть назву" data-lang="uk" style="display: none;">
+                <input type="text" id="titleFilter" name="titleFilter" class="form-control mb-2" placeholder="Enter title" data-lang="en" style="display: none;">
+                <label for="genreFilter" data-lang="ru">Жанр</label>
+                <label for="genreFilter" data-lang="uk" style="display: none;">Жанр</label>
+                <label for="genreFilter" data-lang="en" style="display: none;">Genre</label>
+                <select id="genreFilter" name="genreFilter" class="form-control mb-2">
+                    <option value="all" data-lang="ru">Все</option>
+                    <option value="all" data-lang="uk" style="display: none;">Всі</option>
+                    <option value="all" data-lang="en" style="display: none;">All</option>
+                    <option value="rock" data-lang="ru">Рок</option>
+                    <option value="rock" data-lang="uk" style="display: none;">Рок</option>
+                    <option value="rock" data-lang="en" style="display: none;">Rock</option>
+                    <option value="pop" data-lang="ru">Поп</option>
+                    <option value="pop" data-lang="uk" style="display: none;">Поп</option>
+                    <option value="pop" data-lang="en" style="display: none;">Pop</option>
+                    <option value="romantic" data-lang="ru">Романтика</option>
+                    <option value="romantic" data-lang="uk" style="display: none;">Романтика</option>
+                    <option value="romantic" data-lang="en" style="display: none;">Romantic</option>
+                    <option value="classic music" data-lang="ru">Классическая музыка</option>
+                    <option value="classic music" data-lang="uk" style="display: none;">Класична музика</option>
+                    <option value="classic music" data-lang="en" style="display: none;">Classic Music</option>
+                    <option value="electronic music" data-lang="ru">Электронная музыка</option>
+                    <option value="electronic music" data-lang="uk" style="display: none;">Електронна музика</option>
+                    <option value="electronic music" data-lang="en" style="display: none;">Electronic Music</option>
+                </select>
+
+                <label for="artistFilter" data-lang="ru">Исполнитель</label>
+                <label for="artistFilter" data-lang="uk" style="display: none;">Виконавець</label>
+                <label for="artistFilter" data-lang="en" style="display: none;">Artist</label>
+                <input type="text" id="artistFilter" name="artistFilter" class="form-control mb-2" placeholder="Введите имя исполнителя" data-lang="ru">
+                <input type="text" id="artistFilter" name="artistFilter" class="form-control mb-2" placeholder="Введіть ім'я виконавця" data-lang="uk" style="display: none;">
+                <input type="text" id="artistFilter" name="artistFilter" class="form-control mb-2" placeholder="Enter artist name" data-lang="en" style="display: none;">
+
+                <label for="moodFilter" data-lang="ru">Настроение</label>
+                <label for="moodFilter" data-lang="uk" style="display: none;">Настрій</label>
+                <label for="moodFilter" data-lang="en" style="display: none;">Mood</label>
+                <select id="moodFilter" name="moodFilter" class="form-control mb-2">
+                    <option value="all" data-lang="ru">Все</option>
+                    <option value="all" data-lang="uk" style="display: none;">Всі</option>
+                    <option value="all" data-lang="en" style="display: none;">All</option>
+                    <option value="happy" data-lang="ru">Счастье</option>
+                    <option value="happy" data-lang="uk" style="display: none;">Щастя</option>
+                    <option value="happy" data-lang="en" style="display: none;">Happy</option>
+                    <option value="sad" data-lang="ru">Грусть</option>
+                    <option value="sad" data-lang="uk" style="display: none;">Смуток</option>
+                    <option value="sad" data-lang="en" style="display: none;">Sad</option>
+                    <option value="relaxed" data-lang="ru">Релакс</option>
+                    <option value="relaxed" data-lang="uk" style="display: none;">Релакс</option>
+                    <option value="relaxed" data-lang="en" style="display: none;">Relaxed</option>
+                    <option value="energetic" data-lang="ru">Энерджи</option>
+                    <option value="energetic" data-lang="uk" style="display: none;">Енергійний</option>
+                    <option value="energetic" data-lang="en" style="display: none;">Energetic</option>
+                </select>
+
+                <button type="button" onclick="filterSongs()" class="btn btn-primary" data-lang="ru">Поиск</button>
+                <button type="button" onclick="filterSongs()" class="btn btn-primary" data-lang="uk" style="display: none;">Пошук</button>
+                <button type="button" onclick="filterSongs()" class="btn btn-primary" data-lang="en" style="display: none;">Search</button>
+            </form>
+        </div>
+
+        <div class="main-content">
+            <div class="table-responsive" id="songList">
+                <table class="table table-striped table-hover table-bordered song-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th>Genre</th>
+                            <th>Mood</th>
+                            <th>Music File</th>
+                            <th>Video File</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var song in Model)
+                            {
+                                <tr>
+                                    <td>@song.Title</td>
+                                    <td>@song.Artist</td>
+                                    <td>@song.Genre</td>
+                                    <td>@song.Mood</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(song.MusicFilePath))
+                                        {
+                                            <audio controls class="w-100 audio-file">
+                                                <source src="@Url.Content($"~/{song.MusicFilePath}")" type="audio/mpeg">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        }
+                                        else
+                                        {
+                                            <span>No Music File</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(song.VideoFilePath))
+                                        {
+                                            <video controls class="video-file">
+                                                <source src="@Url.Content($"~/{song.VideoFilePath}")" type="video/mp4">
+                                                Your browser does not support the video element.
+                                            </video>
+                                            <a href="@Url.Content($"~/{song.VideoFilePath}")" download class="btn btn-secondary mt-2">Download Video</a>
+                                        }
+                                        else
+                                        {
+                                            <span>No Video File</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@song.SongId" class="btn btn-primary">Edit</a>
+                                        <form asp-action="Delete" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@song.SongId" />
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">No songs available.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="random-song-playback mt-4">
+                <h3 data-lang="ru">Воспроизведение случайной песни</h3>
+                <h3 data-lang="uk" style="display: none;">Відтворення випадкової пісні</h3>
+                <h3 data-lang="en" style="display: none;">Random Song Playback</h3>
+                <video id="randomSongVideo" width="320" height="240" controls>
+                    <source id="randomSongSource" src="" type="video/mp4">
+                    Ваш браузер не поддерживает тег video.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        function filterSongs() {
+            var form = $('#songFilterForm');
+            var serializedData = form.serialize();
+
+            console.log("Serialized data sent to server:", serializedData);
+
+            $.ajax({
+                url: '@Url.Action("FilterSongs", "Songs")',
+                type: 'GET',
+                data: serializedData,
+                success: function (data) {
+                    console.log("Data received from server:", data);
+
+                    $('#songList').html(data);
+
+                    playRandomSong();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Ошибка: " + textStatus, errorThrown);
+                }
+            });
+        }
+
+        function playRandomSong() {
+            var songs = $('#songList').find('video source').map(function () {
+                return $(this).attr('src');
+            }).get();
+
+            if (songs.length > 0) {
+                var randomIndex = Math.floor(Math.random() * songs.length);
+                var randomSongUrl = songs[randomIndex];
+                var randomSongSource = document.getElementById('randomSongSource');
+                randomSongSource.src = randomSongUrl;
+                var randomSongVideo = document.getElementById('randomSongVideo');
+                randomSongVideo.load();
+            }
+        }
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            playRandomSong();
+        });
+    </script>
+</body>
+</html>

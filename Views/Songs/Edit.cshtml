@@ -1,0 +1,148 @@
+﻿@model BestMusPortal.Services.DTO.SongDTO
+
+@{
+    ViewData["Title"] = "Edit Song";
+    Layout = "_Layout";
+}
+
+<h5 data-lang="ru">Редактировать песню</h5>
+<h5 data-lang="uk" style="display: none;">Редагувати пісню</h5>
+<h5 data-lang="en" style="display: none;">Edit Song</h5>
+
+<h4 data-lang="ru">Песня</h4>
+<h4 data-lang="uk" style="display: none;">Пісня</h4>
+<h4 data-lang="en" style="display: none;">Song</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="SongId" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label">Название</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Artist" class="control-label">Исполнитель</label>
+                <input asp-for="Artist" class="form-control" />
+                <span asp-validation-for="Artist" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreId" class="control-label">Жанр</label>
+                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mood" class="control-label">Настроение</label>
+                <select asp-for="Mood" class="form-control" asp-items="ViewBag.MoodList"></select>
+                <span asp-validation-for="Mood" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MusicFile" class="control-label">Музыкальный файл</label>
+                <input asp-for="MusicFile" class="form-control" type="file" />
+                <span asp-validation-for="MusicFile" class="text-danger"></span>
+                @if (!string.IsNullOrEmpty(Model.MusicFilePath))
+                {
+                    <audio controls>
+                        <source src="@Url.Content($"~/{Model.MusicFilePath}")" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="VideoFile" class="control-label">Видео файл</label>
+                <input asp-for="VideoFile" class="form-control" type="file" />
+                <span asp-validation-for="VideoFile" class="text-danger"></span>
+                @if (!string.IsNullOrEmpty(Model.VideoFilePath))
+                {
+                    <video width="200" height="150" controls>
+                        <source src="@Url.Content($"~/{Model.VideoFilePath}")" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="VideoUrl" class="control-label">URL видео</label>
+                <input asp-for="VideoUrl" class="form-control" />
+                <span asp-validation-for="VideoUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">Имя пользователя</label>
+                <input asp-for="UserName" class="form-control" readonly="readonly" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label">ID пользователя</label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" data-lang="ru" />
+                <input type="submit" value="Зберегти" class="btn btn-primary" data-lang="uk" style="display: none;" />
+                <input type="submit" value="Save" class="btn btn-primary" data-lang="en" style="display: none;" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" data-lang="ru">Назад к списку</a>
+    <a asp-action="Index" data-lang="uk" style="display: none;">Назад до списку</a>
+    <a asp-action="Index" data-lang="en" style="display: none;">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        document.getElementById('GenreId').addEventListener('change', function () {
+            var selectedGenreId = this.options[this.selectedIndex].value;
+            document.getElementById('GenreId').value = selectedGenreId;
+        });
+    </script>
+    <script type="text/javascript">
+        function previewFile(event, elementId) {
+            var preview = document.getElementById(elementId);
+            var source = document.getElementById(elementId + 'Source');
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                source.src = reader.result;
+                preview.style.display = 'block';
+                preview.load();
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                source.src = "";
+                preview.style.display = 'none';
+            }
+        }
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+}
+Примечания:

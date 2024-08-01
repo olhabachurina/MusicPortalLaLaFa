@@ -1,0 +1,171 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.UserDTO>
+
+    @{
+        ViewData["Title"] = "Admin Panel";
+        Layout = "_Layout";
+    }
+
+    <h5 data-lang="ru">Панель администратора</h5>
+    <h5 data-lang="uk" style="display: none;">Панель адміністратора</h5>
+    <h5 data-lang="en" style="display: none;">Admin Panel</h5>
+    @if (Model.Any())
+    {
+        <div class="flex-container">
+            <div class="filter-section">
+                <h3 data-lang="ru">Фильтр пользователей</h3>
+                <h3 data-lang="uk" style="display: none;">Фільтр користувачів</h3>
+                <h3 data-lang="en" style="display: none;">User Filter</h3>
+                <form id="filterForm">
+                    <label for="userFilter" data-lang="ru">Имя</label>
+                    <label for="userFilter" data-lang="uk" style="display: none;">Ім'я</label>
+                    <label for="userFilter" data-lang="en" style="display: none;">Name</label>
+                    <input type="text" id="userFilter" name="nameFilter" placeholder="Введите имя" class="form-control mb-2">
+
+                    <label for="emailFilter" data-lang="ru">Email</label>
+                    <label for="emailFilter" data-lang="uk" style="display: none;">Email</label>
+                    <label for="emailFilter" data-lang="en" style="display: none;">Email</label>
+                    <input type="email" id="emailFilter" name="emailFilter" placeholder="Введите email" class="form-control mb-2">
+
+                    <label for="statusFilter" data-lang="ru">Активность</label>
+                    <label for="statusFilter" data-lang="uk" style="display: none;">Активність</label>
+                    <label for="statusFilter" data-lang="en" style="display: none;">Activity</label>
+                    <select id="statusFilter" name="statusFilter" class="form-control mb-2">
+                        <option value="all" data-lang="ru">Все</option>
+                        <option value="active" data-lang="ru">Активные</option>
+                        <option value="inactive" data-lang="ru">Неактивные</option>
+                        <option value="all" data-lang="uk" style="display: none;">Всі</option>
+                        <option value="active" data-lang="uk" style="display: none;">Активні</option>
+                        <option value="inactive" data-lang="uk" style="display: none;">Неактивні</option>
+                        <option value="all" data-lang="en" style="display: none;">All</option>
+                        <option value="active" data-lang="en" style="display: none;">Active</option>
+                        <option value="inactive" data-lang="en" style="display: none;">Inactive</option>
+                    </select>
+
+                    <button type="button" onclick="filterUsers()" class="btn btn-primary" data-lang="ru">Поиск</button>
+                    <button type="button" onclick="filterUsers()" class="btn btn-primary" data-lang="uk" style="display: none;">Пошук</button>
+                    <button type="button" onclick="filterUsers()" class="btn btn-primary" data-lang="en" style="display: none;">Search</button>
+                </form>
+            </div>
+
+            <div class="table-section">
+                <table class="table table-bordered bg-light">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th data-lang="ru">Имя пользователя</th>
+                            <th data-lang="ru">Email</th>
+                            <th data-lang="ru">Действия</th>
+                            <th data-lang="uk" style="display: none;">Ім'я користувача</th>
+                            <th data-lang="uk" style="display: none;">Електронна пошта</th>
+                            <th data-lang="uk" style="display: none;">Дії</th>
+                            <th data-lang="en" style="display: none;">UserName</th>
+                            <th data-lang="en" style="display: none;">Email</th>
+                            <th data-lang="en" style="display: none;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <form asp-action="Approve" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@user.UserId" />
+                                        <input type="submit" value="Approve" class="btn btn-success" />
+                                    </form>
+                                    <form asp-action="Reject" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@user.UserId" />
+                                        <input type="submit" value="Reject" class="btn btn-danger" />
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>No users to display.</p>
+    }
+
+    <div class="user-list mt-4">
+        <h4 data-lang="ru">Результат поиска</h4>
+        <h4 data-lang="uk" style="display: none;">Результат пошуку</h4>
+        <h4 data-lang="en" style="display: none;">Search results</h4>
+        <div id="userList">
+            @await Html.PartialAsync("~/Views/Admin/_UserListPartial.cshtml", Model as IEnumerable<BestMusPortal.Models.User>)
+        </div>
+    </div>
+
+    <script>
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+
+        function filterUsers() {
+            var form = $('#filterForm');
+            $.ajax({
+                url: '@Url.Action("FilterUsers", "Admin")',
+                type: 'GET',
+                data: form.serialize(),
+                success: function (data) {
+                    $('#userList').html(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error: " + textStatus, errorThrown);
+                }
+            });
+        }
+    </script>
+
+    <style>
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            background-color: #e0f7fa;
+            padding: 20px;
+        }
+
+        .filter-section {
+            flex: 1;
+        }
+
+        .table-section {
+            flex: 2;
+            overflow-x: auto;
+        }
+
+        .table {
+            background-color: #f0f8ff;
+            width: 100%;
+        }
+
+        .thead-dark {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .user-list {
+            background-color: #e0f7fa;
+            padding: 20px;
+        }
+    </style>

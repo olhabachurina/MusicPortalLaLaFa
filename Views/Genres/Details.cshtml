@@ -1,0 +1,53 @@
+﻿@model BestMusPortal.Services.DTO.GenreDTO
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_Layout";
+}
+
+<h5 data-lang="ru">Детали Жанра</h5>
+<h5 data-lang="uk" style="display: none;">Деталі Жанру</h5>
+<h5 data-lang="en" style="display: none;">Genre Details</h5>
+
+<h5 data-lang="ru">Жанр</h5>
+<h5 data-lang="uk" style="display: none;">Жанр</h5>
+<h5 data-lang="en" style="display: none;">Genre</h5>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.GenreId" data-lang="ru">Редактировать</a>
+    <a asp-action="Edit" asp-route-id="@Model?.GenreId" data-lang="uk" style="display: none;">Редагувати</a>
+    <a asp-action="Edit" asp-route-id="@Model?.GenreId" data-lang="en" style="display: none;">Edit</a> |
+    <a asp-action="Index" data-lang="ru">Назад к списку</a>
+    <a asp-action="Index" data-lang="uk" style="display: none;">Назад до списку</a>
+    <a asp-action="Index" data-lang="en" style="display: none;">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+
+            changeLanguage(document.getElementById("languageSelect").value);
+        });
+    </script>
+}

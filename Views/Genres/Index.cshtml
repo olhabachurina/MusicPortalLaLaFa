@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MusicPortalLaLaFa.Models.GenreViewModel>
+
+@{
+    ViewData["Title"] = "Genres";
+}
+
+<h5 data-lang="ru">Жанры</h5>
+<h5 data-lang="uk" style="display: none;">Жанри</h5>
+<h5 data-lang="en" style="display: none;">Genres</h5>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary" data-lang="ru">Создать</a>
+    <a asp-action="Create" class="btn btn-primary" data-lang="uk" style="display: none;">Створити</a>
+    <a asp-action="Create" class="btn btn-primary" data-lang="en" style="display: none;">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in Model)
+        {
+            <tr>
+                <td>@genre.Name</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@genre.GenreId" class="btn btn-danger">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+
+            /
+            changeLanguage(document.getElementById("languageSelect").value);
+        });
+    </script>
+}

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.UserDTO>
+@{
+    ViewData["Title"] = "Users Index";
+    Layout = "_Layout";
+}
+
+<h2 data-lang="ru">Список пользователей</h2>
+<h2 data-lang="uk" style="display: none;">Список користувачів</h2>
+<h2 data-lang="en" style="display: none;">Users List</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary" data-lang="ru">Создать нового пользователя</a>
+    <a asp-action="Create" class="btn btn-primary" data-lang="uk" style="display: none;">Створити нового користувача</a>
+    <a asp-action="Create" class="btn btn-primary" data-lang="en" style="display: none;">Create New User</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().IsApproved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Role)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsApproved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-warning" data-lang="ru">Редактировать</a>
+                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-warning" data-lang="uk" style="display: none;">Редагувати</a>
+                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-warning" data-lang="en" style="display: none;">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info" data-lang="ru">Подробнее</a>
+                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info" data-lang="uk" style="display: none;">Детальніше</a>
+                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info" data-lang="en" style="display: none;">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger" data-lang="ru">Удалить</a>
+                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger" data-lang="uk" style="display: none;">Видалити</a>
+                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger" data-lang="en" style="display: none;">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

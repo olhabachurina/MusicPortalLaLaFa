@@ -1,0 +1,15 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.UserDTO>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var user in Model)
+        {
+            <li>@user.UserName (@user.Email)</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No users found</p>
+}

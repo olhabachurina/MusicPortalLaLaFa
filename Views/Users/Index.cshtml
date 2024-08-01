@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.UserDTO>
+
+@{
+    ViewData["Title"] = "Users";
+    Layout = "_Layout";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+    <h5>Список пользователей</h5>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Активность</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.IsActive ? "Активен" : "Неактивен"</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

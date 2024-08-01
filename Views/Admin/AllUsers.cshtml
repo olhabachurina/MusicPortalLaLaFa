@@ -1,0 +1,64 @@
+﻿@model IEnumerable<BestMusPortal.Services.DTO.UserDTO>
+
+<div class="sidebar-right">
+    <h3 data-lang="ru">Добро пожаловать на Музыкальный портал</h3>
+    <h3 data-lang="uk" style="display: none;">Ласкаво просимо на Музичний портал</h3>
+    <h3 data-lang="en" style="display: none;">Welcome to the Music Portal</h3>
+    <form id="filterForm">
+        <label for="userFilter" data-lang="ru">Имя</label>
+        <label for="userFilter" data-lang="uk" style="display: none;">Ім'я</label>
+        <label for="userFilter" data-lang="en" style="display: none;">Name</label>
+        <input type="text" id="userFilter" name="nameFilter" placeholder="Введите имя">
+
+        <label for="emailFilter" data-lang="ru">Email</label>
+        <label for="emailFilter" data-lang="uk" style="display: none;">Електронна пошта</label>
+        <label for="emailFilter" data-lang="en" style="display: none;">Email</label>
+        <input type="email" id="emailFilter" name="emailFilter" placeholder="Введите email">
+
+        <label for="statusFilter" data-lang="ru">Активность</label>
+        <label for="statusFilter" data-lang="uk" style="display: none;">Активність</label>
+        <label for="statusFilter" data-lang="en" style="display: none;">Activity</label>
+        <select id="statusFilter" name="statusFilter">
+            <option value="all" data-lang="ru">Все</option>
+            <option value="active" data-lang="ru">Активные</option>
+            <option value="inactive" data-lang="ru">Неактивные</option>
+
+            <option value="all" data-lang="uk" style="display: none;">Всі</option>
+            <option value="active" data-lang="uk" style="display: none;">Активні</option>
+            <option value="inactive" data-lang="uk" style="display: none;">Неактивні</option>
+
+            <option value="all" data-lang="en" style="display: none;">All</option>
+            <option value="active" data-lang="en" style="display: none;">Active</option>
+            <option value="inactive" data-lang="en" style="display: none;">Inactive</option>
+        </select>
+
+        <button type="button" onclick="filterUsers()" data-lang="ru">Поиск</button>
+        <button type="button" onclick="filterUsers()" data-lang="uk" style="display: none;">Пошук</button>
+        <button type="button" onclick="filterUsers()" data-lang="en" style="display: none;">Search</button>
+    </form>
+    <div class="user-list">
+        <h4 data-lang="ru">Список пользователей</h4>
+        <h4 data-lang="uk" style="display: none;">Список користувачів</h4>
+        <h4 data-lang="en" style="display: none;">User List</h4>
+        <div id="userList">
+            @await Html.PartialAsync("_UserListPartial", Model)
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterUsers() {
+        var form = $('#filterForm');
+        $.ajax({
+            url: '@Url.Action("AllUsers", "Admin")',
+            type: 'GET',
+            data: form.serialize(),
+            success: function (data) {
+                $('#userList').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error: " + textStatus, errorThrown);
+            }
+        });
+    }
+</script>

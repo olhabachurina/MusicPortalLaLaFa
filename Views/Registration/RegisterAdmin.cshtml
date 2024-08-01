@@ -1,0 +1,69 @@
+﻿@model BestMusPortal.Services.DTO.UserDTO
+
+
+@{
+    ViewData["Title"] = "Регистрация Администратора";
+}
+
+<h5 data-lang="ru">Регистрация Администратора</h5>
+<h5 data-lang="uk" style="display: none;">Реєстрація Адміністратора</h5>
+<h5 data-lang="en" style="display: none;">Administrator Registration</h5>
+
+<form asp-action="RegisterAdmin" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label" data-lang="ru">Имя пользователя</label>
+        <label asp-for="UserName" class="control-label" data-lang="uk" style="display: none;">Ім'я користувача</label>
+        <label asp-for="UserName" class="control-label" data-lang="en" style="display: none;">Username</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label" data-lang="ru">Электронная почта</label>
+        <label asp-for="Email" class="control-label" data-lang="uk" style="display: none;">Електронна пошта</label>
+        <label asp-for="Email" class="control-label" data-lang="en" style="display: none;">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label" data-lang="ru">Пароль</label>
+        <label asp-for="Password" class="control-label" data-lang="uk" style="display: none;">Пароль</label>
+        <label asp-for="Password" class="control-label" data-lang="en" style="display: none;">Password</label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Register" class="btn btn-primary" data-lang="ru" />
+        <input type="submit" value="Реєстрація" class="btn btn-primary" data-lang="uk" style="display: none;" />
+        <input type="submit" value="Register" class="btn btn-primary" data-lang="en" style="display: none;" />
+    </div>
+</form>
+
+<script>
+    function changeLanguage(lang) {
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("languageSelect").addEventListener("change", function () {
+            changeLanguage(this.value);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+</script>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}

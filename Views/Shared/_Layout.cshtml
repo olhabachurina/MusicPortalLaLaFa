@@ -1,0 +1,448 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        @{
+            var title = $"{ViewData["Title"]} - Музыкальный портал";
+            for (var i = 0; i < title.Length; i++)
+            {
+                <span class="title-letter" style="animation-delay: @(i * 0.1)s;">@title[i]</span>
+            }
+        }
+    </title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/images/fon.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #343a40;
+        }
+
+        header {
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .note-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .song-card-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .song-card {
+            flex: 1;
+            min-width: 45%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .song-card img {
+                width: 100%;
+                border-radius: 10px;
+            }
+
+            .song-card h5 {
+                margin: 10px 0;
+            }
+
+            .song-card p {
+                color: #6c757d;
+            }
+
+            .song-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+        .list-unstyled li {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .list-unstyled li:hover {
+                background-color: #343a40;
+                color: #fff;
+                cursor: pointer;
+            }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        select {
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sidebar, .main-content {
+            flex: 1;
+            max-width: 300px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            max-width: 600px;
+        }
+
+            .sidebar h3, .main-content h3 {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        .sidepanel {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+        }
+
+            .sidepanel.right {
+                right: 0;
+                left: auto;
+            }
+
+            .sidepanel a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: white;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidepanel a:hover {
+                    color: #f1f1f1;
+                }
+
+            .sidepanel .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+            .sidepanel.right .closebtn {
+                left: 25px;
+                right: auto;
+            }
+
+            .sidepanel .content-center {
+                text-align: center;
+                margin-top: 50px;
+            }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        h5[data-lang="ru"], h5[data-lang="uk"], h5[data-lang="en"], h5 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .login-background {
+            background-color: #e0f7fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group, tr, th {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+    <header class="my-4 text-center">
+        <h1 data-lang="ru">Музыкальный портал</h1>
+        <h1 data-lang="uk" style="display: none;">Музичний портал</h1>
+        <h1 data-lang="en" style="display: none;">Music Portal</h1>
+
+        <div>
+            <select id="languageSelect" class="form-control" style="max-width: 150px; display: inline-block;">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" data-lang="ru">Главная</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" data-lang="uk" style="display: none;">Головна</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" data-lang="en" style="display: none;">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index" data-lang="ru">Жанры</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index" data-lang="uk" style="display: none;">Жанри</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index" data-lang="en" style="display: none;">Genres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Create" data-lang="ru">Добавить жанр</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Create" data-lang="uk" style="display: none;">Додати жанр</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Create" data-lang="en" style="display: none;">Add Genre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Songs" asp-action="Create" data-lang="ru">Добавить песню</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Songs" asp-action="Create" data-lang="uk" style="display: none;">Додати пісню</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Songs" asp-action="Create" data-lang="en" style="display: none;">Add Song</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Register" data-lang="ru">Регистрация</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Register" data-lang="uk" style="display: none;">Реєстрація</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Register" data-lang="en" style="display: none;">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="RegisterAdmin" data-lang="ru">Регистрация Админа</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="RegisterAdmin" data-lang="uk" style="display: none;">Реєстрація Адміна</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="RegisterAdmin" data-lang="en" style="display: none;">Admin Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index" data-lang="ru">Админ</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index" data-lang="uk" style="display: none;">Адмін</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index" data-lang="en" style="display: none;">Admin</a>
+                        </li>
+                        @*  <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AllUsers" data-lang="ru">Все пользователи</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AllUsers" data-lang="uk" style="display: none;">Всі користувачі</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AllUsers" data-lang="en" style="display: none;">All Users</a>
+                        </li> *@
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="genresPanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeGenresPanel()">&times;</a>
+        <div class="content-center">
+            <h3 data-lang="ru">Жанры</h3>
+            <h3 data-lang="uk" style="display: none;">Жанри</h3>
+            <h3 data-lang="en" style="display: none;">Genres</h3>
+            <ul class="list-unstyled">
+                <li data-lang="ru"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Рок</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Рок</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Rock</li>
+                <li data-lang="ru"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Поп</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Поп</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Pop</li>
+                <li data-lang="ru"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon">Романтика</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon">Романтика</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Romance</li>
+                <li data-lang="ru"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Классическая музыка</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Класична музика</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Classical Music</li>
+                <li data-lang="ru"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Электронная музыка</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Електронна музика</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/icon-music.png" alt="Note Icon" class="note-icon"> Electronic Music</li>
+            </ul>
+            <h3 data-lang="ru">Настроение</h3>
+            <h3 data-lang="uk" style="display: none;">Настрій</h3>
+            <h3 data-lang="en" style="display: none;">Mood</h3>
+            <ul class="list-unstyled">
+                <li data-lang="ru"><img src="~/images/happiness.png" alt="Note Icon" class="note-icon"> Счастье</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/happiness.png" alt="Note Icon" class="note-icon">Щастя</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/happiness.png" alt="Note Icon" class="note-icon">Happy</li>
+                <li data-lang="ru"><img src="~/images/sadness.png" alt="Note Icon" class="note-icon">   Грусть</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/sadness.png" alt="Note Icon" class="note-icon">Смуток</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/sadness.png" alt="Note Icon" class="note-icon">Sad</li>
+                <li data-lang="ru"><img src="~/images/relaxed.png" alt="Note Icon" class="note-icon">   Релакс</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/relaxed.png" alt="Note Icon" class="note-icon">Релакс</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/relaxed.png" alt="Note Icon" class="note-icon">Relax</li>
+                <li data-lang="ru"><img src="~/images/energy.png" alt="Note Icon" class="note-icon">    Энерджи</li>
+                <li data-lang="uk" style="display: none;"><img src="~/images/energy.png" alt="Note Icon" class="note-icon">Енерджі</li>
+                <li data-lang="en" style="display: none;"><img src="~/images/energy.png" alt="Note Icon" class="note-icon">Energeti</li>
+            </ul>
+
+            <h5 data-lang="ru">Выбирай музыку! Слушай! Скачивай! Наслаждайся! И помни: если твой сосед стучит в стену, это знак, что он тоже хочет поучаствовать в твоем сольном концерте!</h5>
+            <h5 data-lang="uk" style="display: none;">Обирай музику! Слухай!Завантажуй! Насолоджуйся! І пам'ятай: якщо твій сусід стукає у стіну, це знак, що він теж хоче взяти участь у твоєму сольному концерті!</h5>
+            <h5 data-lang="en" style="display: none;">Choose your music! Listen! Download! Enjoy! And remember: if your neighbor knocks on the wall, it’s a sign that he also wants to take part in your recital!</h5>
+            <ul class="list-unstyled">
+                <li data-lang="ru"><img src="~/images/guitar.png" alt="Note Icon" class="note-icon"> </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="clipsPanel" class="sidepanel right">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeClipsPanel()">&times;</a>
+        <div class="content-center">
+            <h3 data-lang="ru">Топ Клипов</h3>
+            <h3 data-lang="uk" style="display: none;">Топ Кліпів</h3>
+            <h3 data-lang="en" style="display: none;">Top Clips</h3>
+            <div class="song-card-container">
+                <div class="song-card">
+                    <img src="~/images/Sabrina.jpg" alt="Thumbnail">
+                    <h5>Espresso</h5>
+                    <p>Sabrina Carpenter</p>
+                    <video controls>
+                        <source src="~/video/y2mate.com - Sabrina Carpenter  Espresso Official Video_360P.mp4" type="video/mp4">
+                        Ваш браузер не поддерживает элемент
+                        <code>video</code>.
+                    </video>
+                </div>
+                <div class="song-card">
+                    <img src="~/images/Sting.jpg" alt="Thumbnail">
+                    <h5>Englishman in New York</h5>
+                    <p>Sting</p>
+                    <video controls>
+                        <source src="~/video/utomp3.com - Sting  Englishman In New York.mp4" type="video/mp4">
+                        Ваш браузер не поддерживает элемент
+                        <code>video</code>.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-center mb-3">
+            <button class="openbtn btn btn-secondary mr-2" onclick="openGenresPanel()" data-lang="ru">Жанры</button>
+            <button class="openbtn btn btn-secondary mr-2" onclick="openGenresPanel()" data-lang="uk" style="display: none;">Жанри</button>
+            <button class="openbtn btn btn-secondary mr-2" onclick="openGenresPanel()" data-lang="en" style="display: none;">Genres</button>
+            <button class="openbtn btn btn-secondary" onclick="openClipsPanel()" data-lang="ru">Клипы</button>
+            <button class="openbtn btn btn-secondary" onclick="openClipsPanel()" data-lang="uk" style="display: none;">Кліпи</button>
+            <button class="openbtn btn btn-secondary" onclick="openClipsPanel()" data-lang="en" style="display: none;">Clips</button>
+        </div>
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+
+
+            <footer>
+                <p>&copy; 2024 Музыкальный портал. Все права защищены.</p>
+            </footer>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+            <script>
+                function changeLanguage(lang) {
+                    document.querySelectorAll('[data-lang]').forEach(element => {
+                        element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+                    });
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById("languageSelect").addEventListener("change", function () {
+                        changeLanguage(this.value);
+                    });
+
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        });
+                    });
+                });
+
+                function openGenresPanel() {
+                    document.getElementById("genresPanel").style.width = "250px";
+                }
+
+                function closeGenresPanel() {
+                    document.getElementById("genresPanel").style.width = "0";
+                }
+
+                function openClipsPanel() {
+                    document.getElementById("clipsPanel").style.width = "250px";
+                }
+
+                function closeClipsPanel() {
+                    document.getElementById("clipsPanel").style.width = "0";
+                }
+
+                function filterUsers() {
+                    var form = $('#filterForm');
+                    $.ajax({
+                        url: '@Url.Action("AllUsers", "Admin")',
+                        type: 'GET',
+                        data: form.serialize(),
+                        success: function (data) {
+                            $('#userList').html(data);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error: " + textStatus, errorThrown);
+                        }
+                    });
+                }
+            </script>
+            @RenderSection("Scripts", required: false)
+</body>
+</html>

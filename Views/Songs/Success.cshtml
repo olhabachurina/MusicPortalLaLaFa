@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Success";
+    Layout = "_Layout";
+}
+
+<h5 data-lang="ru">Успех!</h5>
+<h5 data-lang="uk" style="display: none;">Успіх!</h5>
+<h5 data-lang="en" style="display: none;">Success!</h5>
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success">
+        <p>@ViewBag.SuccessMessage</p>
+    </div>
+}
+
+@if (ViewBag.MusicFilePath != null)
+{
+    <div>
+        <h4>Music File:</h4>
+        <audio controls>
+            <source src="@Url.Content("~/" + ViewBag.MusicFilePath)" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+}
+
+@if (ViewBag.VideoFilePath != null)
+{
+    <div>
+        <h4>Video File:</h4>
+        <video controls>
+            <source src="@Url.Content("~/" + ViewBag.VideoFilePath)" type="video/mp4">
+            Your browser does not support the video element.
+        </video>
+    </div>
+}
+
+<div>
+    <a asp-action="Index" data-lang="ru">Назад к списку</a>
+    <a asp-action="Index" data-lang="uk" style="display: none;">Назад до списку</a>
+    <a asp-action="Index" data-lang="en" style="display: none;">Back to List</a>
+</div>
+@section Scripts {
+    <script>
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("languageSelect").addEventListener("change", function () {
+                changeLanguage(this.value);
+            });
+        });
+    </script>
+}

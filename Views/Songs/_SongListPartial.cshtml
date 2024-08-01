@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SongViewModel>
+
+<table class="table table-striped table-hover table-bordered song-table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Genre</th>
+            <th>Mood</th>
+            <th>Music File</th>
+            <th class="video-column">Video File</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var song in Model)
+            {
+                <tr>
+                    <td>@song.Title</td>
+                    <td>@song.Artist</td>
+                    <td>@song.Genre</td>
+                    <td>@song.Mood</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(song.MusicFilePath))
+                        {
+                            <audio controls class="w-100 audio-file">
+                                <source src="@Url.Content($"~/{song.MusicFilePath}")" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        }
+                        else
+                        {
+                            <span>No Music File</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(song.VideoFilePath))
+                        {
+                            <video controls class="video-file">
+                                <source src="@Url.Content($"~/{song.VideoFilePath}")" type="video/mp4">
+                                Your browser does not support the video element.
+                            </video>
+                            <a href="@Url.Content($"~/{song.VideoFilePath}")" download class="btn btn-secondary mt-2">Download Video</a>
+                        }
+                        else
+                        {
+                            <span>No Video File</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="Songs" asp-route-id="@song.SongId">Edit</a>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@song.SongId" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No songs available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
