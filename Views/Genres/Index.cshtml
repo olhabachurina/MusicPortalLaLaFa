@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicPortalLaLaFa.Models.GenreViewModel>
+﻿@model IEnumerable<BestMusPortal.Services.DTO.GenreDTO>
 
 @{
     ViewData["Title"] = "Genres";
@@ -16,8 +16,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Название</th>
-            <th>Действия</th>
+            <th>Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,7 @@
             <tr>
                 <td>@genre.Name</td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@genre.GenreId" class="btn btn-danger">Удалить</a>
+                    <a asp-action="Delete" asp-route-id="@genre.GenreId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
@@ -47,7 +47,7 @@
                 changeLanguage(this.value);
             });
 
-            /
+            
             changeLanguage(document.getElementById("languageSelect").value);
         });
     </script>

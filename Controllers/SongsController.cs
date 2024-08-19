@@ -20,6 +20,8 @@ using System.Xml.Linq;
 using BestMusPortal.Services.Services;
 using BestMusPortal.Services.Mapping;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
+using MusicPortalLaLaFa.Hubs;
 namespace MusicPortalLaLaFa.Controllers
 {
     [Authorize]
@@ -32,15 +34,16 @@ namespace MusicPortalLaLaFa.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<SongsController> _logger;
         private readonly IMapper _mapper;
-
+        private readonly IHubContext<MusicHub> _hubContext;
         public SongsController(
-            ISongService songService,
-            IGenreService genreService,
-            IUserService userService,
-            IWebHostEnvironment webHostEnvironment,
-            ILogger<SongsController> logger,
-            IMapper mapper
-            )
+    ISongService songService,
+    IGenreService genreService,
+    IUserService userService,
+    IWebHostEnvironment webHostEnvironment,
+    ILogger<SongsController> logger,
+    IMapper mapper,
+    IHubContext<MusicHub> hubContext // Добавляем IHubContext
+)
         {
             _songService = songService;
             _genreService = genreService;
@@ -48,6 +51,7 @@ namespace MusicPortalLaLaFa.Controllers
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
             _mapper = mapper;
+            _hubContext = hubContext; // Инициализируем поле _hubContext
         }
 
         public async Task<IActionResult> Index()
@@ -95,7 +99,6 @@ namespace MusicPortalLaLaFa.Controllers
             songDTO.VideoUrl = Url.Content($"~/{songDTO.VideoFilePath}");
             songDTO.UserName = user.UserName;
 
-            // Получение жанра на основе GenreId
             var genre = await _genreService.GetGenreByIdAsync(songDTO.GenreId);
 
             if (genre == null)
@@ -105,13 +108,8 @@ namespace MusicPortalLaLaFa.Controllers
                 return View(songDTO);
             }
 
-            // Присваиваем имя жанра в поле Genre объекта songDTO
             songDTO.Genre = genre.Name;
 
-            // Логирование для проверки заполнения поля Genre
-            _logger.LogInformation("Genre: {Genre}", songDTO.Genre);
-
-            // Проверяем, заполнено ли поле Genre
             if (string.IsNullOrEmpty(songDTO.Genre))
             {
                 _logger.LogError("Genre is null or empty before saving.");
@@ -120,14 +118,16 @@ namespace MusicPortalLaLaFa.Controllers
                 return View(songDTO);
             }
 
-            // Передача songDTO в сервис для сохранения
             await _songService.AddSongAsync(songDTO);
+
+            // Отправка уведомления через SignalR
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"A new song '{songDTO.Title}' has been added.");
 
             TempData["Success"] = "Песня успешно создана!";
             return RedirectToAction(nameof(Success));
         }
 
-            [HttpGet]
+        [HttpGet]
         public IActionResult Success()
         {
             _logger.LogInformation("Displaying Success page.");
@@ -260,7 +260,17 @@ namespace MusicPortalLaLaFa.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var song = await _songService.GetSongByIdAsync(id);
+            if (song == null)
+            {
+                return NotFound();
+            }
+
             await _songService.DeleteSongAsync(id);
+
+            // Отправка уведомления через SignalR
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"The song '{song.Title}' has been deleted.");
+
             return RedirectToAction(nameof(Index));
         }
 

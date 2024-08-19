@@ -59,14 +59,20 @@ namespace BestMusPortal.Services.Services
 
         public async Task DeleteGenreAsync(int genreId)
         {
+            
+
             var genre = await _unitOfWork.Genres.GetByIdAsync(genreId);
             if (genre == null)
             {
+                
                 throw new ValidationException("Genre not found", nameof(genreId));
             }
 
             await _unitOfWork.Genres.DeleteAsync(genreId);
+            
+
             await _unitOfWork.SaveAsync();
+            
         }
     }
 }

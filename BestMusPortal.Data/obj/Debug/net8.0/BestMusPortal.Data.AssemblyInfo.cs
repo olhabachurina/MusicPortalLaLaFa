@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BestMusPortal.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ccfaa3d37dba80bde9e9e6deb363723bacd63a2")]
 [assembly: System.Reflection.AssemblyProductAttribute("BestMusPortal.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BestMusPortal.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

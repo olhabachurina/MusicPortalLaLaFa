@@ -8,7 +8,7 @@
             var title = $"{ViewData["Title"]} - Музыкальный портал";
             for (var i = 0; i < title.Length; i++)
             {
-                <span class="title-letter" style="animation-delay: @(i * 0.1)s;">@title[i]</span>
+                    <span class="title-letter" style="animation-delay: @(i * 0.1)s;">@title[i]</span>
             }
         }
     </title>
@@ -390,6 +390,7 @@
 
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
             <script>
                 function changeLanguage(lang) {
                     document.querySelectorAll('[data-lang]').forEach(element => {
@@ -410,6 +411,57 @@
                             });
                         });
                     });
+
+                    // Подключение к SignalR хабу
+                    const connection = new signalR.HubConnectionBuilder()
+                        .withUrl("/musicHub")
+                        .build();
+
+                    connection.start().then(function () {
+                        console.log("SignalR Connected.");
+                    }).catch(function (err) {
+                        console.error("SignalR connection error: ", err.toString());
+                    });
+
+                    // Обработчик сообщений от сервера
+                    connection.on("ReceiveNotification", function (message, type) { // Добавил параметр type
+                        showAlert(message, type); // Передаем тип сообщения в функцию отображения уведомления
+                    });
+
+                    // Функция для отображения уведомления
+                    function showAlert(message, type) {
+                        const alertDiv = document.createElement("div");
+
+                        // Проверяем тип сообщения и применяем соответствующий цвет
+                        if (type === "genre") {
+                            alertDiv.className = "alert alert-secondary";  // Серый цвет для жанров
+                            alertDiv.style.backgroundColor = "#6c757d";  
+                        } else {
+                            alertDiv.className = "alert alert-info";  // Синий цвет для песен
+                            alertDiv.style.backgroundColor = "#007bff";  
+                        }
+
+                        alertDiv.textContent = message;
+
+                       
+                        alertDiv.style.position = "fixed";           
+                        alertDiv.style.bottom = "20px";              
+                        alertDiv.style.right = "20px";               
+                        alertDiv.style.zIndex = "9999";             
+                        alertDiv.style.padding = "15px";             
+                        alertDiv.style.color = "#fff";               
+                        alertDiv.style.borderRadius = "25px";         
+                        alertDiv.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)"; 
+                        alertDiv.style.fontSize = "18px";            
+                        alertDiv.style.textAlign = "center";         
+                        alertDiv.style.width = "300px";             
+
+                        document.body.appendChild(alertDiv);
+
+                        setTimeout(() => {
+                            alertDiv.remove();
+                        }, 30000);  //  время показа уведомления 
+                    }
                 });
 
                 function openGenresPanel() {
